@@ -192,10 +192,10 @@ jobs:
     steps:
       - name: Remove Label
         run: |
-          curl --silent --fail-with-body \
+          curl --silent \
           -X DELETE \
           -H 'Accept: application/vnd.github.v3+json' \
-          -H 'Authorization: token ${{ github.token }}' \
+          -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
           'https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/labels/github-action'
 
 
