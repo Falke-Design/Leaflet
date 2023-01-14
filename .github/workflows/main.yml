@@ -1,11 +1,15 @@
 name: CI
-on: [push, pull_request]
+on:
+  push
+  pull_request:
+    types: [ opened, synchronize, reopened, labeled ]
 permissions:
   contents: read
 env:
   NODE_VERSION: 18
 jobs:
   setup:
+    if: github.event.action != 'labeled' || github.event.label.name == 'github-action'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -36,6 +40,7 @@ jobs:
           key: ${{ runner.os }}-${{ github.ref }}-${{ github.sha }}-setup
 
   build-docs:
+    if: github.event.action != 'labeled'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -53,6 +58,7 @@ jobs:
 
   lint:
     needs: setup
+    if: github.event.action != 'labeled' || github.event.label.name == 'github-action'
     runs-on: ubuntu-latest
     steps:
       - name: Restore setup
@@ -97,6 +103,7 @@ jobs:
 
   test:
     needs: setup
+    if: github.event.action != 'labeled' || github.event.label.name == 'github-action'
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
     strategy:
       fail-fast: false
