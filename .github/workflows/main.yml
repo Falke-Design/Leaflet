@@ -1,11 +1,17 @@
 name: CI
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    types: [ opened, synchronize, reopened, labeled ]
 permissions:
   contents: read
 env:
   NODE_VERSION: 18
 jobs:
   setup:
+    if: github.event.action != 'labeled' || github.event.label.name == 'restart-workflow'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -36,6 +42,7 @@ jobs:
           key: ${{ runner.os }}-${{ github.ref }}-${{ github.sha }}-setup
 
   build-docs:
+    if: github.event.action != 'labeled'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -53,6 +60,7 @@ jobs:
 
   lint:
     needs: setup
+    if: github.event.action != 'labeled' || github.event.label.name == 'restart-workflow'
     runs-on: ubuntu-latest
     steps:
       - name: Restore setup
@@ -97,6 +105,7 @@ jobs:
 
   test:
     needs: setup
+    if: github.event.action != 'labeled' || github.event.label.name == 'restart-workflow'
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
     strategy:
       fail-fast: false
@@ -176,3 +185,19 @@ jobs:
           npm publish --tag ${TAG:-latest}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  remove-label:
+    if: github.event.action == 'labeled' && github.event.label.name == 'restart-workflow'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Remove Label
+        run: |
+          curl --silent \
+          -X DELETE \
+          -H 'Accept: application/vnd.github.v3+json' \
+          -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          'https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/labels/restart-workflow'
+
+
