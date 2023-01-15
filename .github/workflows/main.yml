@@ -189,6 +189,7 @@ jobs:
   remove-label:
     if: github.event.action == 'labeled' && github.event.label.name == 'github-action'
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - name: Remove Label
         run: |
