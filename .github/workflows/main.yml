@@ -190,7 +190,7 @@ jobs:
     if: github.event.action == 'labeled' && github.event.label.name == 'github-action'
     runs-on: ubuntu-latest
     permissions:
-      issues: write
+      pull-requests: write
     steps:
       - name: Remove Label
         run: |
