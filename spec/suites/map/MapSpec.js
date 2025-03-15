@@ -1223,13 +1223,13 @@ describe.only('Map', () => {
 			container.style.width = `${origWidth}px`;
 			map.setView([0, 0], 0);
 			map.invalidateSize({pan: false});
-			clock = sinon.useFakeTimers({
-				toFake: ['setTimeout', 'clearTimeout', 'Date']
-			});
+			// clock = sinon.useFakeTimers({
+			// 	// toFake: ['setTimeout', 'clearTimeout', 'Date']
+			// });
 		});
 
 		afterEach(() => {
-			clock.restore();
+			// clock.restore();
 		});
 
 		it('pans by the right amount when growing in 1px increments', () => {
