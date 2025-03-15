@@ -23,7 +23,7 @@ module.exports = function (/** @type {import('karma').Config} */ config) {
 			{pattern: 'dist/**/*.js', included: false, served: true},
 			{pattern: 'dist/**/*.png', included: false, served: true},
 			{pattern: 'spec/setup.js', type: 'module'},
-			{pattern: 'spec/suites/**/MapSpec.js', type: 'module'},
+			{pattern: 'spec/suites/**/*.js', type: 'module'},
 			{pattern: 'dist/*.css', type: 'css'},
 		],
 		reporters: ['progress', 'time-stats'],
