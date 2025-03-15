@@ -1349,12 +1349,15 @@ describe.only('Map', () => {
 
 			expect(spy.called).to.be.false;
 
-			map.getContainer().style.width = '200px';
-
 			map.on('resize', () => {
 				expect(spy.called).to.be.true;
+				expect(map.getContainer().style.width).to.equal('200px');
 				done();
 			});
+
+			setTimeout(() => {
+				map.getContainer().style.width = '200px';
+			}, 800);
 		});
 
 		it('disables auto invalidateSize', (done) => {
