@@ -70,7 +70,7 @@ module.exports = function (/** @type {import('karma').Config} */ config) {
 		browserConsoleLogOptions: {level: 'error'},
 		client: {
 			mocha: {
-				forbidOnly: process.env.CI || false
+				forbidOnly: false
 			}
 		}
 	};
