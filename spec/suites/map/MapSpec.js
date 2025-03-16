@@ -1350,6 +1350,7 @@ describe.only('Map', () => {
 			expect(spy.called).to.be.false;
 
 			map.on('resize', () => {
+				console.error('resize', map.getContainer().style.width, spy.called);
 				expect(spy.called).to.be.true;
 				expect(map.getContainer().style.width).to.equal('200px');
 				done();
@@ -1357,6 +1358,10 @@ describe.only('Map', () => {
 
 			setTimeout(() => {
 				map.getContainer().style.width = '200px';
+				console.error('TIMEOUT', map.getContainer().style.width, spy.called);
+				setTimeout(() => {
+					console.error('called', map.getContainer().style.width, spy.called);
+				});
 			}, 800);
 		});
 
